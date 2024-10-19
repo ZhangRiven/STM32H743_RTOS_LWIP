@@ -68,7 +68,8 @@
 #define LAN8742_CLR      ((uint16_t)0x001CU)
 #define LAN8742_ISFR     ((uint16_t)0x001DU)
 #define LAN8742_IMR      ((uint16_t)0x001EU)
-#define LAN8742_PHYSCSR  ((uint16_t)0x001FU)
+#define LAN8742_PHYSCSR  ((uint16_t)0x001EU)
+#define IP101_DSCR       ((uint16_t)0x001DU)
 /**
   * @}
   */
@@ -320,12 +321,12 @@
 /** @defgroup LAN8742_PHYSCSR_Bit_Definition LAN8742 PHYSCSR Bit Definition
   * @{
   */
-#define LAN8742_PHYSCSR_AUTONEGO_DONE   ((uint16_t)0x1000U)
-#define LAN8742_PHYSCSR_HCDSPEEDMASK    ((uint16_t)0x001CU)
-#define LAN8742_PHYSCSR_10BT_HD         ((uint16_t)0x0004U)
-#define LAN8742_PHYSCSR_10BT_FD         ((uint16_t)0x0014U)
-#define LAN8742_PHYSCSR_100BTX_HD       ((uint16_t)0x0008U)
-#define LAN8742_PHYSCSR_100BTX_FD       ((uint16_t)0x0018U) 
+// #define LAN8742_PHYSCSR_AUTONEGO_DONE   ((uint16_t)0x1000U)
+#define LAN8742_PHYSCSR_HCDSPEEDMASK    ((uint16_t)0x0007U)
+#define LAN8742_PHYSCSR_10BT_HD         ((uint16_t)0x0001U)
+#define LAN8742_PHYSCSR_10BT_FD         ((uint16_t)0x0005U)
+#define LAN8742_PHYSCSR_100BTX_HD       ((uint16_t)0x0002U)
+#define LAN8742_PHYSCSR_100BTX_FD       ((uint16_t)0x0006U) 
 /**
   * @}
   */

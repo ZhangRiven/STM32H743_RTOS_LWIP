@@ -1,3 +1,5 @@
+/* driver for ip101GI */
+
 /**
   ******************************************************************************
   * @file    lan8742.c
@@ -49,7 +51,15 @@
 /** @defgroup LAN8742_Private_Functions LAN8742 Private Functions
   * @{
   */
-
+static int32_t ip101_page_select(lan8742_Object_t *pObj, uint32_t page)
+{
+    int32_t status = 0;
+    if(pObj->IO.WriteReg(pObj->DevAddr, 0x14, page) < 0)
+    {
+      status =  LAN8742_STATUS_WRITE_ERROR;
+    }
+    return status;
+}
 /**
   * @brief  Register IO functions to component object
   * @param  pObj: device object  of LAN8742_Object_t.
@@ -93,26 +103,34 @@ int32_t  LAN8742_RegisterBusIO(lan8742_Object_t *pObj, lan8742_IOCtx_t *ioctx)
        pObj->IO.Init();
      }
 
+    // pObj->DevAddr = LAN8742_MAX_DEV_ADDR;
      /* for later check */
      pObj->DevAddr = LAN8742_MAX_DEV_ADDR + 1;
 
      /* Get the device address from special mode register */
      for(addr = 0; addr <= LAN8742_MAX_DEV_ADDR; addr ++)
      {
-       if(pObj->IO.ReadReg(addr, LAN8742_SMR, &regvalue) < 0)
+       pObj->IO.WriteReg(addr, 0x14, 16);
+       if(pObj->IO.ReadReg(addr, IP101_DSCR, &regvalue) < 0)
        {
          status = LAN8742_STATUS_READ_ERROR;
          /* Can't read from this device address
             continue with next address */
          continue;
        }
-
-       if((regvalue & LAN8742_SMR_PHY_ADDR) == addr)
+       if (((regvalue >> 8) & 0x1F) == addr)
        {
          pObj->DevAddr = addr;
          status = LAN8742_STATUS_OK;
          break;
        }
+       
+      //  if((regvalue & LAN8742_SMR_PHY_ADDR) == addr)
+      //  {
+      //    pObj->DevAddr = addr;
+      //    status = LAN8742_STATUS_OK;
+      //    break;
+      //  }
      }
 
      if(pObj->DevAddr > LAN8742_MAX_DEV_ADDR)
@@ -305,16 +323,17 @@ int32_t LAN8742_GetLinkState(lan8742_Object_t *pObj)
   }
   else /* Auto Nego enabled */
   {
+    ip101_page_select(pObj, 16);
     if(pObj->IO.ReadReg(pObj->DevAddr, LAN8742_PHYSCSR, &readval) < 0)
     {
       return LAN8742_STATUS_READ_ERROR;
     }
 
     /* Check if auto nego not done */
-    if((readval & LAN8742_PHYSCSR_AUTONEGO_DONE) == 0)
-    {
-      return LAN8742_STATUS_AUTONEGO_NOTDONE;
-    }
+    // if((readval & LAN8742_PHYSCSR_AUTONEGO_DONE) == 0)
+    // {
+    //   return LAN8742_STATUS_AUTONEGO_NOTDONE;
+    // }
 
     if((readval & LAN8742_PHYSCSR_HCDSPEEDMASK) == LAN8742_PHYSCSR_100BTX_FD)
     {

@@ -678,7 +678,9 @@ void HAL_ETH_MspInit(ETH_HandleTypeDef* ethHandle)
     HAL_NVIC_SetPriority(ETH_IRQn, 5, 0);
     HAL_NVIC_EnableIRQ(ETH_IRQn);
   /* USER CODE BEGIN ETH_MspInit 1 */
-
+    HAL_GPIO_WritePin(ETH_RESET_N_GPIO_Port, ETH_RESET_N_Pin, GPIO_PIN_RESET);
+    HAL_Delay(100);
+    HAL_GPIO_WritePin(ETH_RESET_N_GPIO_Port, ETH_RESET_N_Pin, GPIO_PIN_SET);
   /* USER CODE END ETH_MspInit 1 */
   }
 }

@@ -97,7 +97,8 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
+  __HAL_RCC_D2SRAM2_CLK_ENABLE();//Can be used even if not enabled
+  __HAL_RCC_D2SRAM3_CLK_ENABLE();
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
