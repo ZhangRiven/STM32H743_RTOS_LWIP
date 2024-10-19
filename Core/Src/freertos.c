@@ -25,7 +25,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "netif.h"
+#include "tcp_clinet_test.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -117,6 +118,14 @@ void StartDefaultTask(void *argument)
   /* init code for LWIP */
   MX_LWIP_Init();
   /* USER CODE BEGIN StartDefaultTask */
+  extern struct netif gnetif;
+  while (gnetif.ip_addr.addr == 0)
+  {
+    osDelay(1);
+  }
+  
+  client_socket_init();
+  
   /* Infinite loop */
   for(;;)
   {
